@@ -4,11 +4,10 @@ import { Button } from "react-bootstrap";
 
 import metamaskIcon from "./metamask.svg";
 
-export default function MetaMask() {
+export default function MetaMask({ onClick }) {
   return (
-    <Button variant="dark">
-      Connect
-      <img src={metamaskIcon} style={{ width: 20 }} alt="metamask" />
+    <Button variant="dark" onClick={onClick}>
+      Connect <img src={metamaskIcon} style={{ width: 20 }} alt="metamask" />
     </Button>
   );
 }

@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 
 import MetaMask from "../MetaMask/MetaMask";
 
-export default function Navbar() {
+export default function Navbar({ connectMetamask, web3, ethAccount }) {
   return (
     <BSNavbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Container>
@@ -40,13 +40,20 @@ export default function Navbar() {
             <Nav.Link as={Link} to="/minting">
               Mint an Item
             </Nav.Link>
-            <Nav.Link as={Link} to="/mynft">
-              My NFT
-            </Nav.Link>
 
-            <Nav.Item>
-              <MetaMask />
-            </Nav.Item>
+            {/* 
+            ethAccount의 값이 존재하면 MyNFT출력 (metamask X)
+            ethAccount의 값이 없으면 Metamask가 출력 (metamask O)
+            */}
+            {ethAccount ? (
+              <Nav.Link as={Link} to="/mynft">
+                My NFT
+              </Nav.Link>
+            ) : (
+              <Nav.Item>
+                <MetaMask onClick={connectMetamask} />
+              </Nav.Item>
+            )}
           </Nav>
         </BSNavbar.Collapse>
       </Container>
