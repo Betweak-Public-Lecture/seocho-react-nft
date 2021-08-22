@@ -6,16 +6,24 @@ import {
   NavDropdown,
 } from "react-bootstrap";
 
+import { Link } from "react-router-dom";
+
+import MetaMask from "../MetaMask/MetaMask";
+
 export default function Navbar() {
   return (
     <BSNavbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Container>
-        <BSNavbar.Brand href="#home">React-Bootstrap</BSNavbar.Brand>
+        <BSNavbar.Brand as={Link} to="/">
+          Home
+        </BSNavbar.Brand>
         <BSNavbar.Toggle aria-controls="responsive-navbar-nav" />
         <BSNavbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="#features">Features</Nav.Link>
-            <Nav.Link href="#pricing">Pricing</Nav.Link>
+            <Nav.Link as={Link} to="/market">
+              Market
+            </Nav.Link>
+
             <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
               <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2">
@@ -29,10 +37,16 @@ export default function Navbar() {
             </NavDropdown>
           </Nav>
           <Nav>
-            <Nav.Link href="#deets">More deets</Nav.Link>
-            <Nav.Link eventKey={2} href="#memes">
-              Dank memes
+            <Nav.Link as={Link} to="/minting">
+              Mint an Item
             </Nav.Link>
+            <Nav.Link as={Link} to="/mynft">
+              My NFT
+            </Nav.Link>
+
+            <Nav.Item>
+              <MetaMask />
+            </Nav.Item>
           </Nav>
         </BSNavbar.Collapse>
       </Container>
