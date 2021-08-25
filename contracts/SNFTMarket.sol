@@ -117,15 +117,6 @@ MarketContract
         
         _alreadyListingItem[_nftContract][_tokenId] = true;
 
-    //  struct MarketItem{
-    //      uint256 itemId;        // SNFT Market에서 관리하는 id
-    //      uint256 tokenId;       // NFT Contract(SNFT에서) 관리하는 id
-    //      uint256 price;         // user가 팔기를 희망하는 금액
-    //      address nftContract;   // NFT ContractAddress(ERC721 - SNFT)
-    //      address seller;        // 파는 사람의 account address
-    //      address buyer;         // 구매자의 account address
-    //      uint8 status;          // 판매 상태 여부(status=0: 취소, status=1:판매중, status=2: 판매완료)
-    //  }
         idToMarketItem[_itemIds] = MarketItem(
             _itemIds, 
             _tokenId, 
