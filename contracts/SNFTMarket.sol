@@ -46,6 +46,9 @@ MarketContract
     // key: itemId, value: MarketItem mapping
      mapping(uint256 => MarketItem) private idToMarketItem;
 
+    // key: ContractAddress value mapping(uint256(_tokenId)=>bool(true, false))
+    mapping(address=> mapping(uint256 => bool)) private _alreadyListingItem;
+
      /**
      [연습문제1.]
      setListingPrice와 setPercentPrice를 정의하세요.
@@ -78,7 +81,22 @@ MarketContract
         owner.transfer(_amount);
         
     }
+    /**
+     [연습문제2] --> 판매 등록하기
+     createMarketItem(address _nftContract, uint256 _tokenId, uint256 _price)정의
+     - 외부에서 접근 가능
+     - ethereum을 listingPrice만큼 지금받아야 함
+     - _price는 0보다 커야합니다. (판매금액)
+     - _itemIds를 1씩 증가시키면서 idToMarketItem의 id로써 사용되어야 합니다.
+     - 해당 _tokenId의 소유주가 정말 contract 요청한 address가 맞는지
+     - 현재 _nftContract의 _tokenId가 현재 판매중인지 확인(_alreadyListingItem 활용) 
 
+     -> 판매중으로 명시
+     -> 이벤트 호출
+     
+     판매자가 호출
+
+     */
      
 
  }
