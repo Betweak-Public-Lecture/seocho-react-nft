@@ -85,18 +85,58 @@ MarketContract
      [연습문제2] --> 판매 등록하기
      createMarketItem(address _nftContract, uint256 _tokenId, uint256 _price)정의
      - 외부에서 접근 가능
-     - ethereum을 listingPrice만큼 지금받아야 함
-     - _price는 0보다 커야합니다. (판매금액)
-     - _itemIds를 1씩 증가시키면서 idToMarketItem의 id로써 사용되어야 합니다.
-     - 해당 _tokenId의 소유주가 정말 contract 요청한 address가 맞는지
+     - ethereum을 listingPrice만큼 지급받아야 함
      - 현재 _nftContract의 _tokenId가 현재 판매중인지 확인(_alreadyListingItem 활용) 
+     - _price는 0보다 커야합니다. (판매금액)
 
+     
+     - 해당 _tokenId의 소유주가 정말 contract 요청한 address가 맞는지
+     
+     ----
+     - _itemIds를 1씩 증가시키면서 idToMarketItem의 id로써 사용되어야 합니다.
      -> 판매중으로 명시
      -> 이벤트 호출
      
      판매자가 호출
 
      */
+     function createMarketItem(address _nftContract, uint256 _tokenId, uint256 _price) public payable{
+         // 1. listingPrice 지급 받은지 확인
+         require(msg.value == listingPrice);
+
+         // 2. 현재 _nftContract의 _tokenId가 판매중인지 확인(_alreadyListingItem)
+         //  mapping(address=> mapping(uint256 => bool)) private _alreadyListingItem;
+        require(!_alreadyListingItem[_nftContract][_tokenId]);
+         // 3. price >0 
+        require(_price >0);
+
+        // 해당 _tokenId의 소유자가 정말 Contract요청한 address(판매자)가 맞는지 확인.
+        address nftOwner = IERC721(_nftContract).ownerOf(_tokenId);
+        require(nftOwner == _msgSender());
+        // _msgSender() == msg.sender
+        
+        _alreadyListingItem[_nftContract][_tokenId] = true;
+
+    //  struct MarketItem{
+    //      uint256 itemId;        // SNFT Market에서 관리하는 id
+    //      uint256 tokenId;       // NFT Contract(SNFT에서) 관리하는 id
+    //      uint256 price;         // user가 팔기를 희망하는 금액
+    //      address nftContract;   // NFT ContractAddress(ERC721 - SNFT)
+    //      address seller;        // 파는 사람의 account address
+    //      address buyer;         // 구매자의 account address
+    //      uint8 status;          // 판매 상태 여부(status=0: 취소, status=1:판매중, status=2: 판매완료)
+    //  }
+        idToMarketItem[_itemIds] = MarketItem(
+            _itemIds, 
+            _tokenId, 
+            _price, 
+            _nftContract, 
+            _msgSender(),
+            address(0),
+            1);
+        _itemIds++;
+        emit MarketItemCreated(_itemIds, _tokenId, _price, _nftContract, _msgSender(), address(0), 1);
+     }
      
 
  }
