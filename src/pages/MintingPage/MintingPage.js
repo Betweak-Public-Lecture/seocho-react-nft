@@ -22,8 +22,9 @@ export default function MintingPage() {
         console.log("title, description, image is required");
         return false;
       }
+      console.log(image);
       const token = await client.store({
-        title: title,
+        name: title,
         description: description,
         image: new File(image, image[0].name, {
           type: image[0].type,
