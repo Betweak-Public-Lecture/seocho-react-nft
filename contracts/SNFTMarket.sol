@@ -28,6 +28,31 @@ MarketContract
          uint8 status
      );
 
+     /**
+       [연습문제6 - Event 구성하기]
+       형식은 자유
+       - MarketItemSaled Event 선언하고 emit 
+       - MarketItemCanceld Event 선언하고 emit
+      */
+      event MarketItemSaled(
+          uint256 itemId,
+          uint256 tokenId,
+          uint256 price,
+          address nftContract,
+          address seller,
+          address buyer,
+          uint8 status
+      );
+      event MarketItemCanceld(
+          uint256 itemId,
+          uint256 tokenId,
+          uint256 price,
+          address nftContract,
+          address seller,
+          address buyer,
+          uint8 status
+      );
+
      struct MarketItem{
          uint256 itemId;        // SNFT Market에서 관리하는 id
          uint256 tokenId;       // NFT Contract(SNFT에서) 관리하는 id
@@ -172,6 +197,24 @@ MarketContract
         targetItem.status = 0;
         // 3-3. _itemCancelCount 증가.
         _itemCancelCount++;
+
+    //           event MarketItemSaled(
+    //       uint256 itemId,
+    //       uint256 tokenId,
+    //       uint256 price,
+    //       address nftContract,
+    //       address seller,
+    //       address buyter,
+    //       uint8 status
+    //   );
+        emit marketItemCanceld(
+            targetItem.itemId, 
+            targetItem.tokenId,
+            targetItem.price,
+            targetItem.nftContract,
+            targetItem.seller,
+            targetItem.buyer,
+            targetItem.status);
     }
 
     /**
@@ -227,6 +270,15 @@ MarketContract
 
         address payable seller = payable(targetItem.seller); // >= 0.6
         seller.transfer(targetItem.price); // >= 0.6
+
+        emit MarketItemSaled(
+            targetItem.itemId, 
+            targetItem.tokenId,
+            targetItem.price,
+            targetItem.nftContract,
+            targetItem.seller,
+            targetItem.buyer,
+            targetItem.status);
      }
 
      function getPriceWithFee(uint256 _itemId) public view returns(uint256) {
