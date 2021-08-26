@@ -207,7 +207,7 @@ MarketContract
     //       address buyter,
     //       uint8 status
     //   );
-        emit marketItemCanceld(
+        emit MarketItemCanceld(
             targetItem.itemId, 
             targetItem.tokenId,
             targetItem.price,
