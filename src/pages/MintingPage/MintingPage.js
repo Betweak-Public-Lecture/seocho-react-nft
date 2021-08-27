@@ -1,16 +1,24 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
 
 import ImageUploader from "react-images-upload";
 import { NFTStorage, File } from "nft.storage";
+import SNFTArtifact from "../../artifacts/SNFT.json";
+import { web3, snftContract, marketContract } from "../../utils/ether";
 
 const client = new NFTStorage({
   token:
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDBFYzExRkE1OGIzMUY3MzEzM2M2NmM3QzAzNGRmNzdDMEE5NWU1NjMiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTYyOTYyMTI4NTAxOSwibmFtZSI6IlNORlQifQ.dpre3408KrKnnz_X6Myk2NYnSvAdBY-jV7lu2qvMwK8",
 });
+/**
+ * [연습문제 - web3와 artifacts들을 이용해 SNFT컨트랙트에 createToken Tx을 발생시키세요]
+ * 1. SNFT.json artifacts를 import
+ * 2. SNFT.json을 가지고 web3의 Contract 객체를 생성한다. (useEffect)
+ * 3. token의 ipnft를 createToken을 호출함으로써 TX (onMint 내에서 사용)
+ */
 
-export default function MintingPage() {
+export default function MintingPage({ history, location, match }) {
   const [image, setImage] = useState(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -22,7 +30,13 @@ export default function MintingPage() {
         console.log("title, description, image is required");
         return false;
       }
-      console.log(image);
+      const accounts = await web3.eth.requestAccounts();
+      if (accounts.length === 0) {
+        return;
+      }
+      const account = accounts[0];
+      console.log(account);
+
       const token = await client.store({
         name: title,
         description: description,
@@ -30,9 +44,16 @@ export default function MintingPage() {
           type: image[0].type,
         }),
       });
+      const { ipnft, url, data } = token;
       console.log(token);
+
+      const receipt = await snftContract.methods.createToken(ipnft).send({
+        from: account,
+      });
+      console.log(receipt);
+      alert("Minting!");
     },
-    [image, title, description]
+    [image, title, description, snftContract]
   );
   /**
    * [연습문제]

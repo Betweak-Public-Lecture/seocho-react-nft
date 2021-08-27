@@ -17,7 +17,7 @@ MarketContract
 
 // [수수료를 수취 --> 출금할 수 있어야 함. --> Contract의 소유권이 존재해야함.]
 // Openzeppelin's Ownable 상속
- contract SNFTMarketContract is Ownable {
+ contract SNFTMarket is Ownable {
      event MarketItemCreated(
          uint256 itemId,
          uint256 tokenId,
@@ -245,7 +245,7 @@ MarketContract
          require(_alreadyListingItem[targetItem.nftContract][targetItem.tokenId]);
 
          // 3. 거스름돈 계산
-         uint256 cashback = targetItem.price - priceWithFee;
+         uint256 cashback = msg.value - priceWithFee;
 
          // 4. 실제 tx 실행 로직
         //  외부에 있는 Contract의 TX을 발생시키기 위해서 필요한 것 2개 (interface, CA address)
@@ -283,7 +283,7 @@ MarketContract
 
      function getPriceWithFee(uint256 _itemId) public view returns(uint256) {
          MarketItem memory targetItem = idToMarketItem[_itemId];
-         return targetItem.price * percentPrice / 100;
+         return targetItem.price + (targetItem.price * percentPrice / 100);
      }
 
      /**

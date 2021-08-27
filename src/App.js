@@ -57,7 +57,9 @@ function App() {
         <Route
           path="/minting"
           exact
-          component={(props) => <MintingPage {...props} />}
+          component={(props) => (
+            <MintingPage {...props} web3={web3} ethAccount={ethAccount} />
+          )}
         />
 
         <Route
